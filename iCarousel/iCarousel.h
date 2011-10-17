@@ -55,6 +55,12 @@ typedef enum
 }
 iCarouselType;
 
+typedef enum
+{
+    iCarouselOrientationHorizontal,
+    iCarouselOrientationVertical
+}
+iCarouselOrientation;
 
 @protocol iCarouselDataSource, iCarouselDelegate;
 
@@ -124,10 +130,13 @@ iCarouselType;
 @property (nonatomic, retain, readonly) NSSet *visibleViews __deprecated; // use visibleItemViews instead
 @property (nonatomic, retain, readonly) NSArray *visibleItemViews;
 @property (nonatomic, readonly) CGFloat itemWidth;
+@property (nonatomic, readonly) CGFloat itemHeight;
 @property (nonatomic, retain, readonly) UIView *contentView;
 @property (nonatomic, readonly) CGFloat toggle;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
+@property (nonatomic, assign) iCarouselOrientation orientation;
+
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
@@ -175,6 +184,7 @@ iCarouselType;
 - (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
 - (void)carouselDidEndDecelerating:(iCarousel *)carousel;
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
+- (CGFloat)carouselItemHeight:(iCarousel *)carousel;
 - (CGFloat)carouselOffsetMultiplier:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset;

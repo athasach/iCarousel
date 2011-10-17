@@ -10,7 +10,8 @@
 
 
 #define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
-#define ITEM_SPACING 210
+#define ITEM_SPACING_WIDTH 210
+#define ITEM_SPACING_HEIGHT 210
 #define USE_BUTTONS YES
 
 
@@ -60,8 +61,9 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow2;
-    navItem.title = @"CoverFlow2";
+    carousel.orientation = iCarouselOrientationVertical;
+    carousel.type = iCarouselTypeCustom;
+    navItem.title = @"Custom";
 }
 
 - (void)viewDidUnload
@@ -195,21 +197,28 @@
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
-    return ITEM_SPACING;
+    return ITEM_SPACING_WIDTH;
+}
+
+- (CGFloat)carouselItemHeight:(iCarousel *)carousel
+{
+    //slightly taller than item view
+    return ITEM_SPACING_HEIGHT;
 }
 
 - (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
 {
     //implement 'flip3D' style carousel
-    
+
     //set opacity based on distance from camera
     view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
-    
+
+    CGFloat itemLinearSize = (iCarouselOrientationHorizontal == _carousel.orientation) ? carousel.itemWidth : carousel.itemHeight;
     //do 3d transform
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = self.carousel.perspective;
     transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * carousel.itemWidth);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * itemLinearSize);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel
